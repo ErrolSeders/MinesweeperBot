@@ -1,0 +1,13 @@
+name = "MinesweeperBot"
+uuid = "3d4690b9-6f94-46f1-a491-239d1ad55211"
+authors = ["KauBoui <errolbucy@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+BSON = "fbb218c0-5317-5bc6-957e-2ee96dd4b1f0"
+DSP = "717857b8-e6f2-59f4-9121-6e50c889abd2"
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+Flux = "587475ba-b771-5e3f-ad9e-33799f191a9c"
+Minesweeper = "758a1c58-1ae5-4273-bf23-de2a3f195520"
+Parameters = "d96e819e-fc66-5662-9728-84c9c7592b0a"
+StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
