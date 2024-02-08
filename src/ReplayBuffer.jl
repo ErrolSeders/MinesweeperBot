@@ -1,6 +1,5 @@
 import Base: push!
 
-
 mutable struct Experience
     state::AbstractArray
     action::CartesianIndex{2}

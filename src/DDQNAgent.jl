@@ -1,18 +1,17 @@
 using Parameters: @with_kw
 using Flux 
-using BSON
-using Dates
 using Logging
+
 
 include("ReplayBuffer.jl")
 include("MinesweeperEnv.jl")
 include("Model.jl")
 
 @with_kw mutable struct HyperParams
-    episodes::Integer = 1000
+    episodes::Integer = 10
     batchsize::Integer = 32
     replaybuffercapacity::Integer = 10000
-    updatefreq::Integer = 100
+    updatefreq::Integer = 1
     ϵ::Real = 0.95 
     ϵ_min::Real = 0.001
     ϵ_decay::Real = 0.99975
@@ -104,12 +103,6 @@ function train_loop(hp:: HyperParams, gp:: GameParams)
                     next_state = exp.next_state |> extend_dims
                     done = exp.done
 
-                    if episode % hp.updatefreq == 0
-                        @info state
-                        @info next_state
-                        @info reward
-                    end
-
                     next_qvals = q_target(next_state)
                     TD_targets = (reward + hp.γ * (1-done)) .* next_qvals
 
@@ -133,19 +126,7 @@ function train_loop(hp:: HyperParams, gp:: GameParams)
         @info "Episode $episode : Total Reward $total_reward : Exploration Rate $(hp.ϵ)"
     end
 
-    now = Dates.now()
-    fn_online = "q_online_$(Dates.format(now, "yyyymmdd_HHMMSS")).bson"
-    fn_target = "q_target_$(Dates.format(now, "yyyymmdd_HHMMSS")).bson"
+    save_model(q_online, "online")
+    save_model(q_target, "target")
 
-    current_online = Flux.params(q_online)
-    current_target = Flux.params(q_target)
-
-    BSON.@save fn_online current_online
-    BSON.@save fn_target current_target
-end
-
-begin 
-    hp = HyperParams()
-    gp = GameParams()
-    train_loop(hp, gp)
 end
